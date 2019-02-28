@@ -70,11 +70,13 @@ class EventDashboard extends Component {
 
   state = {
     events: eventsDashboard,
-    isOpen: false
+    isOpen: false,
+    selectedEvent: null
   }
   
   handleFormOpen = () => {
     this.setState({
+      selectedEvent: null,
       isOpen: true
     })
   }
@@ -85,15 +87,22 @@ class EventDashboard extends Component {
     })
   }
 
-  handleCreatEvent = (newEvent) => {
+  handleEditEvent = (eventToUpdate) => () => {
+    this.setState({
+      selectedEvent: eventToUpdate,
+      isOpen: true 
+    })
+  }
+
+  handleCreateEvent = (newEvent) => {
     newEvent.id = cuid();
-    newEvent.hostPhotURL = '/assets/user.png';
+    newEvent.newPhotURL = '/assets/user.png';
     const updatedEvents = [...this.state.events, newEvent];
     this.setState({
       events: updatedEvents,
       isOpen: false
-    })
-  }
+    });
+  };
 
   render() {
     return (
@@ -105,7 +114,7 @@ class EventDashboard extends Component {
           <Grid.Column width={6}>
             <Button onClick={this.handleFormOpen} positive content='Create Event'/>
             {this.state.isOpen &&
-            <EventForm createEvent={this.handleCreatEvent} handleCancel={this.handleCancel}/>}
+            <EventForm createEvent={this.handleCreateEvent} handleCancel={this.handleCancel}/>}
           </Grid.Column>
         </Grid>
       </div>
